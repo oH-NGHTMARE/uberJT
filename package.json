@@ -1,0 +1,19 @@
+{
+  "name": "uberjt",
+  "version": "1.0.0",
+  "description": "Backend logic for Uber Jump Tracker",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oH-NGHTMARE/uberJT.git"
+  },
+  "author": "Pontoon Solutions",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/oH-NGHTMARE/uberJT/issues"
+  },
+  "homepage": "https://github.com/oH-NGHTMARE/uberJT#readme"
+}
