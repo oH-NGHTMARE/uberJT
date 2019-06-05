@@ -4,7 +4,8 @@
   "description": "Backend logic for Uber Jump Tracker",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node ./TEST/cover.js",
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
@@ -15,5 +16,14 @@
   "bugs": {
     "url": "https://github.com/oH-NGHTMARE/uberJT/issues"
   },
-  "homepage": "https://github.com/oH-NGHTMARE/uberJT#readme"
+  "homepage": "https://github.com/oH-NGHTMARE/uberJT#readme",
+  "dependencies": {
+    "events": "^3.0.0",
+    "googleapis": "^39.2.0",
+    "readline": "^1.3.0"
+  },
+  "devDependencies": {
+    "chalk": "^2.4.2",
+    "pretty-error": "^2.1.1"
+  }
 }
