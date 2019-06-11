@@ -32,7 +32,7 @@ exports.setCreds = function(filepath) {
  * @id - attaches id to functions for event listeners
  * doing this allows us to not make duplicate calls
  */
-exports.oAuthGetData = function(credentials, callback, spreadsheetId, sheetName, range, id) {
+exports.OAuthGetData = function(credentials, callback, spreadsheetId, sheetName, range, id) {
     const {client_secret, client_id, redirect_uris} = credentials.installed;
     const oAuth2Client = new google.auth.OAuth2(client_id, client_secret, redirect_uris[0]);
     return fs.readFile(TOKEN_PATH, (err, token) => {
@@ -50,6 +50,43 @@ exports.getData = function(auth, spreadsheetId, sheetName, range, id) {
     }, (err, res) => {
         if(err) return console.log(err);
         universalEmitter.emit(`success_get_data_${id}`, res.data.values);
+        return res.data.values
+    })
+}
+
+/**  oAuth and Function for 
+ * appending data from a sheet
+ * @credentials - set by user
+ * @callback - function to run, should match oAuth
+ * @spreadsheetId - id of the spreadsheet
+ * @sheetName - if sheetname go to id then sheetname
+ * @range - the range to gather data from
+ * @data - data to add to spreadsheet, must be 2d array of arrays
+ * @id - attaches id to functions for event listeners
+ * doing this allows us to not make duplicate calls
+ */
+
+exports.OAuthAppendData = function(credentials, callback, spreadsheetId, sheetName, range, data, id) {
+    const {client_secret, client_id, redirect_uris} = credentials.installed;
+    const oAuth2Client = new google.auth.OAuth2(client_id, client_secret, redirect_uris[0]);
+    return fs.readFile(TOKEN_PATH, (err, token) => {
+        if (err) return getNewToken(oAuth2Client, callback);
+        oAuth2Client.setCredentials(JSON.parse(token));
+        return callback(oAuth2Client, spreadsheetId, sheetName, range, data, id);
+    })
+}
+
+exports.appendData = function(auth, spreadsheetId, sheetName, range, data, id) {
+    const sheets = google.sheets({version:'v4', auth:auth});
+    let resource = {values: data};
+    return sheets.spreadsheets.values.append({
+        spreadsheetId: `${spreadsheetId}`,
+        range: sheetName != 'n/a' ? `${sheetName}!${range}`: `${range}`,
+        resource: resource,
+        valueInputOption: 'RAW'
+    }, (err, res) => {
+        if(err) return console.log(err);
+        universalEmitter.emit(`success_append_data_${id}`, res.data.values);
         return res.data.values
     })
 }
